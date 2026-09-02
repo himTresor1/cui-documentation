@@ -19,18 +19,20 @@ export default function IntroductionPage() {
           }}
         >
           <DocHeroRail>
-            <div className="mx-auto max-w-[760px] px-10 pt-18 pb-14">
-              <div className="mb-4.5 text-[13px] text-cui-muted">
-                Home <span className="mx-1.5">/</span> Introduction
+            <div className="mx-auto flex max-w-[760px] items-center gap-12 px-10 pt-18 pb-14">
+              <div className="min-w-0 flex-1">
+                <h1 className="mb-4 font-display text-[clamp(32px,4.5vw,52px)] leading-[1.1] font-normal text-cui-header-body">
+                  Welcome to Common UI
+                </h1>
+                <p className="mb-5 max-w-[420px] text-[17px] leading-[1.6] text-cui-header-body">
+                  A shared design system for every product team at IST — one
+                  source of truth for how our interfaces look, behave, and get
+                  built.
+                </p>
               </div>
-              <h1 className="mb-4 font-display text-[clamp(36px,4.5vw,52px)] leading-[1.1] font-normal text-cui-header-body">
-                Welcome to Common UI
-              </h1>
-              <p className="mb-5 max-w-[560px] text-[17px] leading-[1.6] text-cui-header-body">
-                A shared design system for every product team at IST — one
-                source of truth for how our interfaces look, behave, and get
-                built.
-              </p>
+              <div className="hidden w-[308px] flex-none overflow-hidden rounded-cui border border-cui-border bg-white xl:block">
+                <img src="/assets/images/components-new.png" alt="" className="block h-full w-full object-cover" />
+              </div>
             </div>
           </DocHeroRail>
         </section>

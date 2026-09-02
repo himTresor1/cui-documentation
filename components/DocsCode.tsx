@@ -87,12 +87,12 @@ export function CodeBlock({
   className?: string;
 }) {
   return (
-    <div className={`mb-2 rounded-[14px] bg-cui-code-bg p-3 ${className}`}>
+    <div className={`mb-2 rounded-[7px] bg-cui-code-bg p-3 ${className}`}>
       <div className="mb-2 flex h-7 items-center justify-between px-1">
         <span className="font-mono text-xs text-cui-muted">{filename}</span>
         <CopyButton text={children} />
       </div>
-      <div className="overflow-hidden rounded-[10px] border border-cui-border">
+      <div className="overflow-hidden rounded-cui-sm border border-cui-border">
         <CodeLines code={children} language={language} />
       </div>
     </div>
@@ -151,11 +151,11 @@ export function CodeTabs({ tabs }: { tabs: CodeTab[] }) {
   return (
     <div>
       <CuiTabs tabs={tabs} active={activeTab.id} onChange={setActive} />
-      <div className="rounded-[14px] bg-cui-code-bg p-3">
+      <div className="rounded-[7px] bg-cui-code-bg p-3">
         <div className="mb-2 flex h-7 items-center justify-end px-1">
           <CopyButton text={activeTab.code} />
         </div>
-        <div className="overflow-hidden rounded-[10px] border border-cui-border">
+        <div className="overflow-hidden rounded-cui-sm border border-cui-border">
           <CodeLines code={activeTab.code} language={activeTab.language ?? "bash"} />
         </div>
       </div>

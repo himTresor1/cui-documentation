@@ -84,27 +84,29 @@ export default function GettingStartedPage() {
           }}
         >
           <DocHeroRail>
-            <div className="mx-auto max-w-[760px] px-10 pt-18 pb-14">
-              <div className="mb-4.5 text-[13px] text-cui-muted">
-                Home <span className="mx-1.5">/</span> Getting Started
+            <div className="mx-auto flex max-w-[760px] items-center gap-12 px-10 pt-18 pb-14">
+              <div className="min-w-0 flex-1">
+                <h1 className="mb-4 font-display text-[clamp(32px,4.5vw,52px)] leading-[1.1] font-normal text-cui-header-body">
+                  Getting Started
+                </h1>
+                <p className="mb-5 max-w-[420px] text-[17px] leading-[1.6] text-cui-header-body">
+                  Everything you need to install Common UI and ship your first
+                  component in minutes.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="rounded-cui bg-cui-badge-positive-bg px-3 py-1.5 text-xs font-semibold text-cui-badge-positive-text">
+                    React 18 &amp; 19 supported
+                  </span>
+                  <span className="rounded-cui bg-cui-badge-positive-bg px-3 py-1.5 text-xs font-semibold text-cui-badge-positive-text">
+                    Tree-shakeable imports
+                  </span>
+                  <span className="rounded-cui bg-cui-badge-negative-bg px-3 py-1.5 text-xs font-semibold text-cui-badge-negative-text">
+                    Breaking change in v1.3.0: CuiProgress removed
+                  </span>
+                </div>
               </div>
-              <h1 className="mb-4 font-display text-[clamp(36px,4.5vw,52px)] leading-[1.1] font-normal text-cui-header-body">
-                Getting Started
-              </h1>
-              <p className="mb-5 max-w-[560px] text-[17px] leading-[1.6] text-cui-header-body">
-                Everything you need to install Common UI and ship your first
-                component in minutes.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="rounded-cui bg-cui-badge-positive-bg px-3 py-1.5 text-xs font-semibold text-cui-badge-positive-text">
-                  React 18 &amp; 19 supported
-                </span>
-                <span className="rounded-cui bg-cui-badge-positive-bg px-3 py-1.5 text-xs font-semibold text-cui-badge-positive-text">
-                  Tree-shakeable imports
-                </span>
-                <span className="rounded-cui bg-cui-badge-negative-bg px-3 py-1.5 text-xs font-semibold text-cui-badge-negative-text">
-                  Breaking change in v1.3.0: CuiProgress removed
-                </span>
+              <div className="hidden w-[308px] flex-none overflow-hidden rounded-cui border border-cui-border bg-white xl:block">
+                <img src="/assets/images/blocks-new.png" alt="" className="block h-full w-full object-cover" />
               </div>
             </div>
           </DocHeroRail>
