@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Sparkles,
   Download,
@@ -31,8 +31,10 @@ import {
 import PrimarySidebar, { type SidebarTopItem } from "@/components/sidebar/PrimarySidebar";
 import SecondarySidebar from "@/components/sidebar/SecondarySidebar";
 import SidebarItemList, { type SidebarListItem } from "@/components/sidebar/SidebarItemList";
+import DocsHeader from "@/components/documentation/DocsHeader";
+import CommandPalette, { type PaletteSection } from "@/components/documentation/CommandPalette";
 
-const ACTIONS_ITEMS: SidebarListItem[] = [
+const BUTTON_ITEMS: SidebarListItem[] = [
   { key: "overview", label: "Overview", icon: Eye },
   { key: "button", label: "Button", icon: MousePointerClick },
   { key: "back-button", label: "Back Button", icon: ArrowLeft },
@@ -70,7 +72,7 @@ const TOP_LEVEL: SidebarTopItem[] = [
     categories: [
       { key: "overview", label: "Overview", icon: Grid2x2 },
       { key: "input", label: "Input", icon: Pencil },
-      { key: "actions", label: "Actions", icon: Zap },
+      { key: "buttons", label: "Buttons", icon: Zap },
       { key: "data", label: "Data", icon: Table },
       { key: "navigation", label: "Navigation", icon: Compass },
       { key: "feedback", label: "Feedback", icon: MessageSquare },
@@ -96,13 +98,13 @@ function activeKeyForPathname(pathname: string) {
 }
 
 function SecondaryContent({ activeCategory, activeLabel }: { activeCategory: string; activeLabel: string }) {
-  if (activeCategory === "actions") {
+  if (activeCategory === "buttons") {
     return (
       <>
         <div className="px-2.5 pb-2.5 text-xs font-bold tracking-[0.04em] whitespace-nowrap text-cui-muted uppercase">
-          Actions
+          Buttons
         </div>
-        <SidebarItemList items={ACTIONS_ITEMS} defaultActive="button" />
+        <SidebarItemList items={BUTTON_ITEMS} defaultActive="button" />
       </>
     );
   }
@@ -119,15 +121,75 @@ function SecondaryContent({ activeCategory, activeLabel }: { activeCategory: str
 
 export default function DocsSidebarShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeLabel, setActiveLabel] = useState("");
   const [collapsed, setCollapsed] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   function leaveCategory() {
     setActiveCategory(null);
     setActiveLabel("");
     setCollapsed(false);
   }
+
+  function selectCategory(key: string, label: string) {
+    setActiveCategory(key);
+    setActiveLabel(label);
+    setCollapsed(true);
+  }
+
+  // Cmd/Ctrl+K toggles the palette from anywhere on a documentation page.
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPaletteOpen((o) => !o);
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  const currentPageItem = TOP_LEVEL.find((item) => item.key === activeKeyForPathname(pathname));
+  const breadcrumb = activeCategory
+    ? [
+        "Home",
+        TOP_LEVEL.find((item) => item.kind === "toggle" && item.categories.some((c) => c.key === activeCategory))
+          ?.label ?? "",
+        activeLabel,
+      ]
+    : ["Home", currentPageItem?.label ?? ""];
+
+  const paletteSections: PaletteSection[] = useMemo(
+    () => [
+      {
+        title: "Quick Actions",
+        items: TOP_LEVEL.filter((item) => item.kind === "link").map((item) => ({
+          key: item.key,
+          label: item.label,
+          icon: item.icon,
+          action: () => {
+            router.push(item.href);
+            setPaletteOpen(false);
+          },
+        })),
+      },
+      ...TOP_LEVEL.filter((item) => item.kind === "toggle").map((item) => ({
+        title: item.label,
+        items: item.categories.map((cat) => ({
+          key: cat.key,
+          label: cat.label,
+          icon: cat.icon,
+          action: () => {
+            selectCategory(cat.key, cat.label);
+            setPaletteOpen(false);
+          },
+        })),
+      })),
+    ],
+    [router]
+  );
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -137,11 +199,7 @@ export default function DocsSidebarShell({ children }: { children: React.ReactNo
         topLevel={TOP_LEVEL}
         initialActiveKey={activeKeyForPathname(pathname)}
         activeCategory={activeCategory}
-        onSelectCategory={(key, label) => {
-          setActiveCategory(key);
-          setActiveLabel(label);
-          setCollapsed(true);
-        }}
+        onSelectCategory={selectCategory}
         onLeaveCategory={leaveCategory}
         collapsed={collapsed}
         onExpand={() => setCollapsed(false)}
@@ -151,9 +209,13 @@ export default function DocsSidebarShell({ children }: { children: React.ReactNo
           <SecondaryContent activeCategory={activeCategory} activeLabel={activeLabel} />
         </SecondarySidebar>
       )}
-      <main id="docs-scroll" className="min-w-0 flex-1 overflow-y-auto">
-        {children}
+      <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <DocsHeader breadcrumb={breadcrumb} onOpenSearch={() => setPaletteOpen(true)} />
+        <div id="docs-scroll" className="min-h-0 flex-1 overflow-y-auto">
+          {children}
+        </div>
       </main>
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} sections={paletteSections} />
     </div>
   );
 }

@@ -108,10 +108,10 @@ export default function PrimarySidebar({
       <nav className="flex flex-1 flex-col gap-px">
         {topLevel.map((item) => {
           const isOpen = openToggle === item.key;
-          const isActive =
-            item.kind === "toggle"
-              ? item.categories.some((c) => c.key === activeCategory)
-              : activeCategory === null && activeLink === item.key;
+          // A toggle never shows the active pill itself — once one of its
+          // categories is selected, the category is what's active, and
+          // showing both reads as two things being "current" at once.
+          const isActive = item.kind === "toggle" ? false : activeCategory === null && activeLink === item.key;
           const Icon = item.icon;
 
           const itemClasses = `flex min-h-[34px] w-full items-center gap-2 rounded-cui-sm border px-2.5 py-1.5 text-left font-sans text-[13.5px] whitespace-nowrap text-cui-header-body ${
