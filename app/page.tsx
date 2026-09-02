@@ -63,10 +63,18 @@ export default function Home() {
 
           <div className="flex items-center gap-3.5">
             <div className="flex">
-              {[0, 1, 2, 3].map((i) => (
-                <span
-                  key={i}
-                  className="-ml-2 h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br from-[#d9d5f2] to-[#b6a9f0] first:ml-0"
+              {[
+                "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100&h=100&fit=crop&q=80&auto=format",
+                "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&q=80&auto=format",
+                "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop&q=80&auto=format",
+                "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&h=100&fit=crop&q=80&auto=format",
+              ].map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt=""
+                  className="-ml-2 h-8 w-8 rounded-full border-2 border-white object-cover first:ml-0"
+                  style={{ zIndex: 4 - i }}
                 />
               ))}
             </div>
